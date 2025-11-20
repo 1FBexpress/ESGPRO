@@ -1,0 +1,23 @@
+{
+  "project_name": "Full Bin \u0014 ESG Pro / Twin FM \u0014 Interviewer & Back Office MVP",
+  "summary": "Text-first LLM interviewer, lead capture, consultant briefs, commission engine (35% pot), notifications. White-labelled to Full Bin (project lead).",
+  "branding": "Full Bin project lead, small Full Bin logo in header, \"Powered by Full Bin\" footer, emails/SMS show Full Bin sender.",
+  "pricing_source": "prices.json (extracted from ESG Pro Master Price List 18 NOV 2025 PARTNER VERSION.xlsx).",
+  "note_files": "these documents can only be used in code execution",
+  "commission": "35% of gross_amount is commission_total. Split: Full Bin 50% / Spotted Cow 50% (rounding up to favour Spotted Cow).",
+  "contacts": [
+    "Humperdinck (sales)",
+    "Natashia (sales)",
+    "Laurence (ops)"
+  ],
+  "hosting_recommendation": "Vercel (frontend) + Supabase (Postgres + auth) \u0014 demo uses test keys",
+  "deliverables": [
+    "Next.js starter app (minimal)",
+    "API route /api/interview (LLM prompt wrapper + deterministic rules)",
+    "Supabase SQL migration (leads, commissions, contacts)",
+    "prices.json (sample extracted pricing)",
+    "3 sample interview outputs (low/medium/high)",
+    "commission CSV export example",
+    "README with deploy steps (Vercel + Supabase)"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "lead_id": "lead-low-001",
+  "name": "Small Co Ltd",
+  "company": "Small Co Ltd",
+  "urgency": "low",
+  "score": 50,
+  "action": "BUY_50_ASSESSMENT",
+  "lead_brief": "Auto-brief: Small Co Ltd from Small Co Ltd (size 5)",
+  "focus_points": [
+    "Urgency: tender timeline",
+    "Evidence: procurement docs and energy data",
+    "Recommend quick \u00a350 readiness assessment if low budget"
+  ],
+  "opening_questions": [
+    "When is the tender?",
+    "Do you have 12 months energy data?"
+  ],
+  "pricing_recommendation": {
+    "tier": "Small/Medium",
+    "sku_recs": [
+      "ESG-1"
+    ]
+  }
+}

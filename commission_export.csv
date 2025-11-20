@@ -1,0 +1,4 @@
+lead_id,sku,gross_amount,commission_total,fullbin_amount,spottedcow_amount
+lead-low-001,ESG-1,1200,420.0,210.0,210.0
+lead-med-002,ESG-3,1600,560.0,280.0,280.0
+lead-high-003,ESG-3,1600,560.0,280.0,280.0
