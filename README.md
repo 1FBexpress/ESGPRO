@@ -13,4 +13,4 @@ Deploy (quick):
 1) Create a Supabase project and copy the DATABASE_URL and ANON/Service keys.
 2) Create a Vercel project and connect the repo or upload the ZIP.
 3) Set environment variables in Vercel: SUPABASE_URL, SUPABASE_KEY, SENDGRID_API_KEY, TWILIO_SID, TWILIO_TOKEN, STRIPE_SECRET_KEY, LLM_API_KEY.
-4) Deploy. For demo, use test keys only.
+4) Deploy. For demo, use test keys only .
