@@ -1,8 +1,9 @@
 
 import styles from '../styles/Message.module.css';
+import QuickReplyButtons from './QuickReplyButtons';
 
-export default function Message({ message }) {
-  const { type, content, timestamp } = message;
+export default function Message({ message, onQuickReply, isLatest, disabled }) {
+  const { type, content, explanation, quickReplies, timestamp } = message;
 
   const getMessageClass = () => {
     switch (type) {
@@ -21,6 +22,14 @@ export default function Message({ message }) {
     <div className={`${styles.messageWrapper} ${getMessageClass()}`}>
       <div className={styles.messageBubble}>
         <div className={styles.messageContent}>{content}</div>
+        
+        {/* Show explanation text if provided */}
+        {explanation && type === 'bot' && (
+          <div className={styles.explanationText}>
+            {explanation}
+          </div>
+        )}
+        
         {timestamp && (
           <div className={styles.messageTime}>
             {new Date(timestamp).toLocaleTimeString([], { 
@@ -30,6 +39,15 @@ export default function Message({ message }) {
           </div>
         )}
       </div>
+      
+      {/* Show quick reply buttons for latest bot message */}
+      {type === 'bot' && quickReplies && isLatest && onQuickReply && (
+        <QuickReplyButtons 
+          options={quickReplies}
+          onSelect={onQuickReply}
+          disabled={disabled}
+        />
+      )}
     </div>
   );
 }

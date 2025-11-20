@@ -4,7 +4,14 @@ import { useInterview } from '../context/InterviewContext';
 import Message from './Message';
 import TypingIndicator from './TypingIndicator';
 import ResultsPanel from './ResultsPanel';
-import { getNextQuestion, validateResponse, isInterviewComplete } from '../lib/conversationFlow';
+import ProgressIndicator from './ProgressIndicator';
+import { 
+  getNextQuestion, 
+  validateResponse, 
+  isInterviewComplete, 
+  TOTAL_STEPS, 
+  ESTIMATED_TIME 
+} from '../lib/conversationFlow';
 import styles from '../styles/ChatInterface.module.css';
 
 export default function ChatInterface() {
@@ -21,6 +28,7 @@ export default function ChatInterface() {
   const [input, setInput] = useState('');
   const [currentStep, setCurrentStep] = useState(0);
   const [isTyping, setIsTyping] = useState(false);
+  const [showProgress, setShowProgress] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -37,35 +45,32 @@ export default function ChatInterface() {
     if (messages.length === 0) {
       setTimeout(() => {
         addBotMessage(
-          "👋 Hello! I'm your ESG Pro assistant. I'll help you understand how Full Bin can support your sustainability goals. Let's start with a few quick questions."
+          "👋 Hello! I'm your ESG Pro assistant. I'll help you discover how Full Bin can support your sustainability goals.\n\nThis will take just 2-3 minutes, and I'll guide you through each step! ✨"
         );
         setTimeout(() => {
-          const firstQuestion = getNextQuestion(currentStep, {});
-          addBotMessage(firstQuestion);
-        }, 1000);
+          setShowProgress(true);
+          const questionData = getNextQuestion(currentStep, {});
+          addBotMessage(questionData.question, questionData.explanation, questionData.quickReplies);
+        }, 1500);
       }, 500);
     }
   }, []);
 
-  const addBotMessage = (content) => {
+  const addBotMessage = (content, explanation = null, quickReplies = null) => {
     setIsTyping(true);
     setTimeout(() => {
       setIsTyping(false);
       addMessage({
         type: 'bot',
         content,
+        explanation,
+        quickReplies,
         timestamp: new Date().toISOString(),
       });
     }, 800 + Math.random() * 400); // Variable delay for natural feel
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!input.trim() || isLoading || isTyping) return;
-
-    const userMessage = input.trim();
-    setInput('');
-
+  const processUserResponse = async (userMessage) => {
     // Add user message
     addMessage({
       type: 'user',
@@ -85,23 +90,48 @@ export default function ChatInterface() {
     updateData(validation.field, validation.value);
     const updatedData = { ...collectedData, [validation.field]: validation.value };
 
+    // Show success message
+    if (validation.message) {
+      addBotMessage(validation.message);
+    }
+
     // Move to next step
     const nextStep = currentStep + 1;
     setCurrentStep(nextStep);
 
     // Check if interview is complete
     if (isInterviewComplete(nextStep, updatedData)) {
-      addBotMessage("Perfect! Let me analyze your information and prepare your personalized ESG assessment...");
-      
-      // Submit interview
-      setTimeout(async () => {
-        await submitInterview();
+      setTimeout(() => {
+        addBotMessage("🎉 Wonderful! Thank you so much for sharing all that information.\n\nLet me analyze your responses and prepare your personalized ESG assessment...");
+        
+        // Submit interview
+        setTimeout(async () => {
+          await submitInterview();
+        }, 1500);
       }, 1000);
     } else {
-      // Ask next question
-      const nextQuestion = getNextQuestion(nextStep, updatedData);
-      addBotMessage(nextQuestion);
+      // Ask next question after a brief delay
+      setTimeout(() => {
+        const questionData = getNextQuestion(nextStep, updatedData);
+        addBotMessage(questionData.question, questionData.explanation, questionData.quickReplies);
+      }, 1200);
     }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!input.trim() || isLoading || isTyping) return;
+
+    const userMessage = input.trim();
+    setInput('');
+
+    await processUserResponse(userMessage);
+  };
+
+  const handleQuickReply = async (value) => {
+    if (isLoading || isTyping) return;
+    
+    await processUserResponse(value);
   };
 
   const handleKeyPress = (e) => {
@@ -116,17 +146,34 @@ export default function ChatInterface() {
     return <ResultsPanel />;
   }
 
+  // Calculate actual current question number (accounting for bot messages)
+  const currentQuestionNumber = Math.min(currentStep + 1, TOTAL_STEPS);
+
   return (
     <div className={styles.chatContainer}>
       <div className={styles.chatHeader}>
         <h2 className={styles.chatTitle}>ESG Pro Interviewer</h2>
-        <p className={styles.chatSubtitle}>Let's discover your ESG opportunities</p>
+        <p className={styles.chatSubtitle}>Let's discover your ESG opportunities together</p>
       </div>
+
+      {showProgress && (
+        <ProgressIndicator 
+          current={currentQuestionNumber}
+          total={TOTAL_STEPS}
+          estimatedTime={ESTIMATED_TIME}
+        />
+      )}
 
       <div className={styles.messagesContainer}>
         <div className={styles.messagesList}>
           {messages.map((message, index) => (
-            <Message key={index} message={message} />
+            <Message 
+              key={index} 
+              message={message}
+              isLatest={index === messages.length - 1}
+              onQuickReply={handleQuickReply}
+              disabled={isLoading || isTyping}
+            />
           ))}
           {isTyping && <TypingIndicator />}
           <div ref={messagesEndRef} />
@@ -141,7 +188,7 @@ export default function ChatInterface() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Type your answer..."
+            placeholder="Type your answer or click a button above..."
             className={styles.input}
             disabled={isLoading || isTyping}
           />
