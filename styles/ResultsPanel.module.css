@@ -1,0 +1,277 @@
+
+.resultsContainer {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.resultsHeader {
+  text-align: center;
+  padding-bottom: 2rem;
+  border-bottom: 2px solid #f0f0f0;
+  margin-bottom: 2rem;
+}
+
+.resultsTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1.5rem;
+}
+
+.scoreSection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.scoreCircle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.scoreValue {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.scoreLabel {
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+  opacity: 0.9;
+}
+
+.urgencyBadge {
+  padding: 0.75rem 1.5rem;
+  border-radius: 24px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+}
+
+.urgencyHigh {
+  background: #fee;
+  color: #c00;
+}
+
+.urgencyMedium {
+  background: #ffeaa7;
+  color: #d63031;
+}
+
+.urgencyLow {
+  background: #dfe6e9;
+  color: #2d3436;
+}
+
+.briefSection,
+.focusSection,
+.questionsSection,
+.pricingSection {
+  margin-bottom: 2rem;
+}
+
+.sectionTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sectionTitle::before {
+  content: '';
+  width: 4px;
+  height: 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 2px;
+}
+
+.briefText {
+  color: #555;
+  line-height: 1.7;
+  font-size: 1rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+}
+
+.focusList,
+.questionsList {
+  list-style: none;
+  padding: 0;
+}
+
+.focusItem,
+.questionItem {
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+  margin-bottom: 0.75rem;
+  border-left: 4px solid #667eea;
+  color: #555;
+  line-height: 1.6;
+  transition: all 0.2s;
+}
+
+.focusItem:hover,
+.questionItem:hover {
+  background: #eef2ff;
+  transform: translateX(4px);
+}
+
+.pricingCard {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 2px solid rgba(102, 126, 234, 0.2);
+}
+
+.pricingTier {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #667eea;
+  margin-bottom: 0.5rem;
+}
+
+.pricingSku {
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.actionSection {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  padding: 2rem;
+  border-radius: 16px;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.actionTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.actionDescription {
+  color: #666;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.ctaButton {
+  padding: 1rem 2rem;
+  border-radius: 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  white-space: nowrap;
+}
+
+.ctaPrimary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.ctaPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.ctaSecondary {
+  background: #34d399;
+  color: white;
+  box-shadow: 0 4px 12px rgba(52, 211, 153, 0.3);
+}
+
+.ctaSecondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(52, 211, 153, 0.4);
+}
+
+.ctaOutline {
+  background: white;
+  color: #667eea;
+  border: 2px solid #667eea;
+}
+
+.ctaOutline:hover {
+  background: #667eea;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .resultsContainer {
+    padding: 1.5rem;
+  }
+
+  .resultsTitle {
+    font-size: 1.5rem;
+  }
+
+  .scoreSection {
+    gap: 1rem;
+  }
+
+  .scoreCircle {
+    width: 100px;
+    height: 100px;
+  }
+
+  .scoreValue {
+    font-size: 2rem;
+  }
+
+  .actionButtons {
+    flex-direction: column;
+  }
+
+  .ctaButton {
+    width: 100%;
+  }
+}
