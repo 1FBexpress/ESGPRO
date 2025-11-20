@@ -1,8 +1,9 @@
 
 {
   "name": "fullbin-esgpro-interviewer",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
+  "description": "ESG Pro Interviewer - Lead qualification system with email notifications and booking management",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -14,6 +15,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "@supabase/supabase-js": "^2.38.0",
+    "@sendgrid/mail": "^8.1.0",
     "stripe": "^14.0.0"
   },
   "devDependencies": {
