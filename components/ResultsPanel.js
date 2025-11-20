@@ -22,6 +22,19 @@ export default function ResultsPanel() {
     }
   };
 
+  const getUrgencyLabel = () => {
+    switch (urgency) {
+      case 'high':
+        return 'URGENT TIMELINE';
+      case 'medium':
+        return 'MODERATE TIMELINE';
+      case 'low':
+        return 'FLEXIBLE TIMELINE';
+      default:
+        return 'STANDARD TIMELINE';
+    }
+  };
+
   const getActionText = () => {
     switch (action) {
       case 'BOOK_FREE_CONSULT':
@@ -58,7 +71,7 @@ export default function ResultsPanel() {
             <span className={styles.scoreLabel}>Lead Score</span>
           </div>
           <div className={`${styles.urgencyBadge} ${getUrgencyClass()}`}>
-            {urgency.toUpperCase()} PRIORITY
+            {getUrgencyLabel()}
           </div>
         </div>
       </div>

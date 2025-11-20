@@ -7,8 +7,7 @@ export default function Layout({ children }) {
       <header className={styles.header}>
         <div className={styles.headerContent}>
           <div className={styles.logo}>
-            <span className={styles.logoText}>Full Bin</span>
-            <span className={styles.logoSubtext}>ESG Pro</span>
+            <span className={styles.logoText}>ESG Pro Interviewer</span>
           </div>
           <nav className={styles.nav}>
             <a href="/" className={styles.navLink}>Home</a>
