@@ -123,6 +123,15 @@ function determineSKU(answers) {
 function generateFocusPoints(answers, urgency, score) {
   const focus_points = [];
   const tenderDays = Number(answers.tender_days) || 0;
+  const certInterest = detectCertificationInterest(answers);
+  
+  // Certification interest takes priority
+  if (certInterest.bCorp) {
+    focus_points.push('🎯 B Corp Certification Interest - Offer £2,400 Introductory Bundle (Gap Analysis + 8 sessions)');
+  }
+  if (certInterest.ecoVadis) {
+    focus_points.push('⭐ EcoVadis Certification Interest - Offer £2,400 Introductory Bundle (Gap Analysis + 8 sessions)');
+  }
   
   // Urgency-based focus
   if (urgency === 'high' && tenderDays > 0) {
@@ -153,21 +162,23 @@ function generateFocusPoints(answers, urgency, score) {
       focus_points.push('📊 Data collection and measurement systems needed');
     }
     if (painPointsLower.includes('cost') || painPointsLower.includes('budget')) {
-      focus_points.push('💰 Cost-effective solutions - emphasize ROI and £50 assessment');
+      focus_points.push('💰 Cost-effective solutions - emphasize introductory bundle as lower barrier entry');
     }
     if (painPointsLower.includes('compliance') || painPointsLower.includes('regulation')) {
       focus_points.push('⚖️ Regulatory compliance expertise required');
     }
   }
   
-  // Score-based recommendation
-  if (score >= 70) {
-    focus_points.push('✅ High-value lead - prioritize for free consultation booking');
-  } else if (score >= 40) {
-    focus_points.push('💡 Good fit for £50 assessment entry point');
+  // Score-based recommendation (only if not certification interest)
+  if (!certInterest.anyCertification) {
+    if (score >= 70) {
+      focus_points.push('✅ High-value lead - prioritize for free consultation booking');
+    } else if (score >= 40) {
+      focus_points.push('💡 Good fit for £50 assessment entry point');
+    }
   }
   
-  return focus_points.slice(0, 5); // Limit to 5 most relevant points
+  return focus_points.slice(0, 6); // Limit to 6 most relevant points
 }
 
 /**
@@ -195,11 +206,38 @@ function generateOpeningQuestions(answers, urgency) {
 }
 
 /**
+ * Detect if client is interested in B Corp or EcoVadis certification
+ */
+function detectCertificationInterest(answers) {
+  const combinedText = [
+    answers.pain_points,
+    answers.current_esg_status,
+    answers.industry
+  ].join(' ').toLowerCase();
+  
+  const bCorpInterest = combinedText.includes('b corp') || 
+                        combinedText.includes('bcorp') ||
+                        combinedText.includes('b-corp') ||
+                        combinedText.includes('b corporation');
+  
+  const ecoVadisInterest = combinedText.includes('ecovadis') || 
+                           combinedText.includes('eco vadis') ||
+                           combinedText.includes('eco-vadis');
+  
+  return {
+    bCorp: bCorpInterest,
+    ecoVadis: ecoVadisInterest,
+    anyCertification: bCorpInterest || ecoVadisInterest
+  };
+}
+
+/**
  * Generate pricing recommendation
  */
 function generatePricingRecommendation(answers, sku) {
   const sizeStr = String(answers.size || '').toLowerCase();
   const sizeNum = Number(answers.size) || 0;
+  const certInterest = detectCertificationInterest(answers);
   
   let tier = 'Small (1-25)';
   if (sizeStr === 'large' || sizeNum > 100) {
@@ -208,6 +246,34 @@ function generatePricingRecommendation(answers, sku) {
     tier = 'Medium (26-100)';
   }
   
+  // If client shows interest in B Corp or EcoVadis, recommend introductory bundle
+  if (certInterest.anyCertification) {
+    const certificationSkus = [];
+    const certificationProducts = [];
+    
+    if (certInterest.bCorp) {
+      certificationSkus.push('BCORP-INTRO');
+      certificationProducts.push('B Corp Introductory Bundle (£2,400) - Gap Analysis + 8x2hr sessions + Action Plan');
+    }
+    
+    if (certInterest.ecoVadis) {
+      certificationSkus.push('ECOVADIS-INTRO');
+      certificationProducts.push('EcoVadis Introductory Bundle (£2,400) - Gap Analysis + 8x2hr sessions + Action Plan');
+    }
+    
+    // Add standard products
+    certificationProducts.push(`${sku} - ESG Assessment & Strategy`);
+    certificationProducts.push('Full certification support available after readiness assessment');
+    
+    return {
+      tier: 'Certification Track',
+      sku_recs: certificationSkus.concat([sku]),
+      suggested_products: certificationProducts,
+      certification_interest: certInterest
+    };
+  }
+  
+  // Standard recommendation for non-certification leads
   return {
     tier,
     sku_recs: [sku],
