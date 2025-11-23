@@ -1,7 +1,7 @@
 
 {
   "name": "fullbin-esgpro-interviewer",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "description": "ESG Pro Interviewer - Lead qualification system with email notifications and booking management",
   "scripts": {
