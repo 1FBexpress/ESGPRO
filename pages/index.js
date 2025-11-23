@@ -1,4 +1,5 @@
 
+// Last deployment: 2025-11-23 21:35 UTC - Force rebuild with new £2,400 certification pricing
 import Head from 'next/head';
 import Layout from '../components/Layout';
 import ChatInterface from '../components/ChatInterface';
