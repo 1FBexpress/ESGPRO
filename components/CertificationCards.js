@@ -36,19 +36,15 @@ export default function CertificationCards() {
             <ul className={styles.featureList}>
               <li className={styles.featureItem}>
                 <span className={styles.checkmark}>✓</span>
-                Gap Analysis/Readiness Assessment
+                Introductory gap analysis and readiness assessment
               </li>
               <li className={styles.featureItem}>
                 <span className={styles.checkmark}>✓</span>
-                8x 2-hour expert sessions
+                8 × 2-hour expert-led sessions
               </li>
               <li className={styles.featureItem}>
                 <span className={styles.checkmark}>✓</span>
-                Corrective Action Plan
-              </li>
-              <li className={styles.featureItem}>
-                <span className={styles.checkmark}>✓</span>
-                Path to full certification
+                Corrective action plan
               </li>
             </ul>
             
@@ -89,19 +85,15 @@ export default function CertificationCards() {
             <ul className={styles.featureList}>
               <li className={styles.featureItem}>
                 <span className={styles.checkmark}>✓</span>
-                Gap Analysis/Readiness Assessment
+                Introductory gap analysis and readiness assessment
               </li>
               <li className={styles.featureItem}>
                 <span className={styles.checkmark}>✓</span>
-                8x 2-hour expert sessions
+                8 × 2-hour expert-led sessions
               </li>
               <li className={styles.featureItem}>
                 <span className={styles.checkmark}>✓</span>
-                Corrective Action Plan
-              </li>
-              <li className={styles.featureItem}>
-                <span className={styles.checkmark}>✓</span>
-                Bronze/Silver/Gold progression (£10K-£14K)
+                Corrective action plan
               </li>
             </ul>
             
