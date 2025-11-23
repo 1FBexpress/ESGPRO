@@ -1,9 +1,9 @@
 
-// Version: 1.1.0-definitive-fix - Domain configuration resolution
-// Last deployment: 2025-11-23 22:30 UTC
-// CRITICAL: This repo contains CORRECT £2,400 pricing
-// If esgpro-pricing.abacusai.app shows £6,210, the domain is pointing to the WRONG project
-// See DEPLOYMENT_ISSUE_RESOLUTION.md for full details and solution
+// Version: 1.2.0-force-rebuild - FINAL FIX
+// Last deployment: 2025-11-23 23:00 UTC
+// FORCING VERCEL REBUILD - User confirmed site still shows £6,210
+// This version MUST deploy £2,400 pricing with Introductory Bundle features
+// Git commit forced at user request to fix stale deployment
 import Head from 'next/head';
 import Layout from '../components/Layout';
 import ChatInterface from '../components/ChatInterface';
