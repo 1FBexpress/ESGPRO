@@ -12,7 +12,7 @@ export default function CertificationCards() {
   };
 
   return (
-    <section className={styles.certificationSection}>
+    <section className={styles.certificationSection} data-version="2.0-nov23">
       <div className={styles.container}>
         <h2 className={styles.mainTitle}>B Corp & EcoVadis Certification</h2>
         <p className={styles.subtitle}>Prove your ESG credentials and win more contracts</p>
