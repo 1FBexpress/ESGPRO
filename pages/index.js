@@ -1,5 +1,9 @@
 
-// Last deployment: 2025-11-23 21:35 UTC - Force rebuild with new £2,400 certification pricing
+// Version: 1.1.0-definitive-fix - Domain configuration resolution
+// Last deployment: 2025-11-23 22:30 UTC
+// CRITICAL: This repo contains CORRECT £2,400 pricing
+// If esgpro-pricing.abacusai.app shows £6,210, the domain is pointing to the WRONG project
+// See DEPLOYMENT_ISSUE_RESOLUTION.md for full details and solution
 import Head from 'next/head';
 import Layout from '../components/Layout';
 import ChatInterface from '../components/ChatInterface';
