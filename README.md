@@ -27,3 +27,5 @@ This project is configured for Vercel deployment. Push to the connected GitHub r
 ## Version
 
 Version 2.0.0 - Updated pricing with Introductory Bundle features
+
+<!-- Force rebuild 1764012108.8491206 -->
