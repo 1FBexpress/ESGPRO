@@ -1,17 +1,15 @@
 
 .messageWrapper {
   display: flex;
-  animation: slideIn 0.3s ease-out;
+  animation: fadeIn 0.2s ease-out;
 }
 
-@keyframes slideIn {
+@keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
@@ -28,8 +26,8 @@
 }
 
 .messageBubble {
-  max-width: 70%;
-  padding: 0.875rem 1.25rem;
+  max-width: 80%;
+  padding: 1rem 1.5rem;
   border-radius: 18px;
   word-wrap: break-word;
   position: relative;
@@ -59,9 +57,10 @@
 }
 
 .messageContent {
-  line-height: 1.5;
-  font-size: 0.95rem;
+  line-height: 1.6;
+  font-size: 1.05rem;
   white-space: pre-line;
+  color: #1a1a1a;
 }
 
 .explanationText {

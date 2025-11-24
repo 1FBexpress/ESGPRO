@@ -33,26 +33,25 @@ export default function ChatInterface() {
   const inputRef = useRef(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    // Use instant scroll to prevent jerky animations
+    messagesEndRef.current?.scrollIntoView({ behavior: 'auto', block: 'end' });
   };
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages, isTyping]);
+    // Only scroll when new messages arrive, not during typing
+    if (!isTyping) {
+      scrollToBottom();
+    }
+  }, [messages]);
 
   useEffect(() => {
-    // Start conversation
+    // Start conversation - get straight to questions
     if (messages.length === 0) {
       setTimeout(() => {
-        addBotMessage(
-          "👋 Hello! I'm your ESG Pro assistant. I'll help you discover how Full Bin can support your sustainability goals.\n\nThis will take just 2-3 minutes, and I'll guide you through each step! ✨"
-        );
-        setTimeout(() => {
-          setShowProgress(true);
-          const questionData = getNextQuestion(currentStep, {});
-          addBotMessage(questionData.question, questionData.explanation, questionData.quickReplies);
-        }, 1500);
-      }, 500);
+        setShowProgress(true);
+        const questionData = getNextQuestion(currentStep, {});
+        addBotMessage(questionData.question, questionData.explanation, questionData.quickReplies);
+      }, 300);
     }
   }, []);
 
@@ -67,7 +66,7 @@ export default function ChatInterface() {
         quickReplies,
         timestamp: new Date().toISOString(),
       });
-    }, 800 + Math.random() * 400); // Variable delay for natural feel
+    }, 400); // Quick, consistent response
   };
 
   const processUserResponse = async (userMessage) => {
@@ -152,8 +151,7 @@ export default function ChatInterface() {
   return (
     <div className={styles.chatContainer}>
       <div className={styles.chatHeader}>
-        <h2 className={styles.chatTitle}>ESG Pro Interviewer</h2>
-        <p className={styles.chatSubtitle}>Let's discover your ESG opportunities together</p>
+        <h2 className={styles.chatTitle}>ESG Assessment</h2>
       </div>
 
       {showProgress && (
