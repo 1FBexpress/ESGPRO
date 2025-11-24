@@ -77,9 +77,25 @@ export default function ResultsPanel() {
     }
   };
 
+  const getCalendlyLink = () => {
+    // Intelligent routing based on certification interest
+    const interestedBCorp = collectedData?.interested_bcorp?.toLowerCase() === 'yes';
+    const interestedEcoVadis = collectedData?.interested_ecovadis?.toLowerCase() === 'yes';
+    
+    // If only interested in EcoVadis, route to Natashia
+    if (interestedEcoVadis && !interestedBCorp) {
+      return process.env.NEXT_PUBLIC_CALENDLY_LINK_NATASHIA || 'https://calendly.com/nl-esgpro';
+    }
+    
+    // Otherwise (B Corp, both, or neither), route to Humperdinck
+    return process.env.NEXT_PUBLIC_CALENDLY_LINK_HUMPERDINCK || 'https://calendly.com/hjdiary';
+  };
+
   const handlePrimaryAction = () => {
     if (action === 'BOOK_FREE_CONSULT') {
-      setShowBookingForm(true);
+      // Open Calendly in a new window
+      const calendlyLink = getCalendlyLink();
+      window.open(calendlyLink, '_blank', 'width=800,height=900');
     } else if (action === 'BUY_50_ASSESSMENT') {
       // TODO: Integrate with Stripe checkout
       alert('£50 Assessment checkout coming soon! Our team will contact you.');
