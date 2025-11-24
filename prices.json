@@ -1,0 +1,56 @@
+[
+  {
+    "SKU": "ESG-1",
+    "Description": "1-10 employees",
+    "RRP": 1500,
+    "Base": 1200
+  },
+  {
+    "SKU": "ESG-2",
+    "Description": "11-25 employees",
+    "RRP": 1750,
+    "Base": 1400
+  },
+  {
+    "SKU": "ESG-3",
+    "Description": "26-100 employees",
+    "RRP": 2000,
+    "Base": 1600
+  },
+  {
+    "SKU": "CFR-1",
+    "Description": "Carbon Footprint 1-10",
+    "RRP": 1200,
+    "Base": 960
+  },
+  {
+    "SKU": "ESG-PLUS",
+    "Description": "ESG PLUS bundle",
+    "RRP": 12400,
+    "Base": 9920
+  },
+  {
+    "SKU": "BCORP-INTRO",
+    "Description": "B Corp Introductory Bundle - Gap Analysis, 8x2hr sessions, Action Plan",
+    "RRP": 2400,
+    "Base": 1920
+  },
+  {
+    "SKU": "ECOVADIS-INTRO",
+    "Description": "EcoVadis Introductory Bundle - Gap Analysis, 8x2hr sessions, Action Plan",
+    "RRP": 2400,
+    "Base": 1920
+  },
+  {
+    "SKU": "BCORP-FULL",
+    "Description": "B Corp Full Certification Support",
+    "RRP": 6210,
+    "Base": 4968
+  },
+  {
+    "SKU": "ECOVADIS-GOLD",
+    "Description": "EcoVadis Gold Progression Support",
+    "RRP": 14000,
+    "Base": 11200
+  }
+]

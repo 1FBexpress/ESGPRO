@@ -1,0 +1,102 @@
+
+.messageWrapper {
+  display: flex;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.messageUser {
+  justify-content: flex-end;
+}
+
+.messageBot {
+  justify-content: flex-start;
+}
+
+.messageSystem {
+  justify-content: center;
+}
+
+.messageBubble {
+  max-width: 70%;
+  padding: 0.875rem 1.25rem;
+  border-radius: 18px;
+  word-wrap: break-word;
+  position: relative;
+}
+
+.messageUser .messageBubble {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.messageBot .messageBubble {
+  background: white;
+  color: #333;
+  border-bottom-left-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.messageSystem .messageBubble {
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+  text-align: center;
+  font-weight: 500;
+  font-size: 0.9rem;
+  border-radius: 12px;
+  max-width: 80%;
+}
+
+.messageContent {
+  line-height: 1.5;
+  font-size: 0.95rem;
+  white-space: pre-line;
+}
+
+.explanationText {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  opacity: 0.85;
+  font-style: italic;
+  color: #555;
+}
+
+.messageTime {
+  font-size: 0.7rem;
+  opacity: 0.7;
+  margin-top: 0.5rem;
+  text-align: right;
+}
+
+.messageUser .messageTime {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.messageBot .messageTime {
+  color: #999;
+}
+
+@media (max-width: 768px) {
+  .messageBubble {
+    max-width: 85%;
+    padding: 0.75rem 1rem;
+  }
+
+  .messageContent {
+    font-size: 0.9rem;
+  }
+}
