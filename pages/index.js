@@ -7,7 +7,6 @@
 import Head from 'next/head';
 import Layout from '../components/Layout';
 import ChatInterface from '../components/ChatInterface';
-import CertificationCards from '../components/CertificationCards';
 import { InterviewProvider } from '../context/InterviewContext';
 import styles from '../styles/Home.module.css';
 
@@ -22,9 +21,6 @@ export default function Home() {
 
       <InterviewProvider>
         <Layout>
-          {/* Certification Cards Section */}
-          <CertificationCards />
-          
           {/* AI Interviewer Section */}
           <div className={styles.interviewerSection} id="chat-interface">
             <div className={styles.introSection}>
