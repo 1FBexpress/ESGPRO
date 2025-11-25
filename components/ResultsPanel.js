@@ -77,26 +77,17 @@ export default function ResultsPanel() {
     }
   };
 
-  const getCalendlyLink = () => {
-    // Intelligent routing based on certification interest
-    const interestedBCorp = collectedData?.interested_bcorp?.toLowerCase() === 'yes';
-    const interestedEcoVadis = collectedData?.interested_ecovadis?.toLowerCase() === 'yes';
+  const handleCalendlyClick = (consultant) => {
+    const calendlyLinks = {
+      humperdinck: process.env.NEXT_PUBLIC_CALENDLY_LINK_HUMPERDINCK || 'https://calendly.com/hjdiary',
+      natashia: process.env.NEXT_PUBLIC_CALENDLY_LINK_NATASHIA || 'https://calendly.com/nl-esgpro'
+    };
     
-    // If only interested in EcoVadis, route to Natashia
-    if (interestedEcoVadis && !interestedBCorp) {
-      return process.env.NEXT_PUBLIC_CALENDLY_LINK_NATASHIA || 'https://calendly.com/nl-esgpro';
-    }
-    
-    // Otherwise (B Corp, both, or neither), route to Humperdinck
-    return process.env.NEXT_PUBLIC_CALENDLY_LINK_HUMPERDINCK || 'https://calendly.com/hjdiary';
+    window.open(calendlyLinks[consultant], '_blank', 'width=800,height=900');
   };
 
   const handlePrimaryAction = () => {
-    if (action === 'BOOK_FREE_CONSULT') {
-      // Open Calendly in a new window
-      const calendlyLink = getCalendlyLink();
-      window.open(calendlyLink, '_blank', 'width=800,height=900');
-    } else if (action === 'BUY_50_ASSESSMENT') {
+    if (action === 'BUY_50_ASSESSMENT') {
       // TODO: Integrate with Stripe checkout
       alert('£50 Assessment checkout coming soon! Our team will contact you.');
     } else {
@@ -191,21 +182,71 @@ export default function ResultsPanel() {
           <p className={styles.actionDescription}>{getActionDescription()}</p>
           
           <div className={styles.actionButtons}>
-            <button 
-              className={`${styles.ctaButton} ${action === 'BOOK_FREE_CONSULT' ? styles.ctaPrimary : action === 'BUY_50_ASSESSMENT' ? styles.ctaGreen : styles.ctaSecondary}`}
-              onClick={handlePrimaryAction}
-            >
-              {action === 'BOOK_FREE_CONSULT' && '📅 Schedule Free Consultation'}
-              {action === 'BUY_50_ASSESSMENT' && '💷 Get £50 Assessment Now'}
-              {action === 'NURTURE' && '📬 Subscribe to Updates'}
-            </button>
-            
-            <button 
-              className={`${styles.ctaButton} ${styles.ctaOutline}`} 
-              onClick={resetInterview}
-            >
-              🔄 Start New Assessment
-            </button>
+            {action === 'BOOK_FREE_CONSULT' ? (
+              <>
+                <div className={styles.consultantGrid}>
+                  {/* Humperdinck Card */}
+                  <div className={styles.consultantCard}>
+                    <div className={styles.consultantInfo}>
+                      <h4 className={styles.consultantName}>Humperdinck Jackman</h4>
+                      <p className={styles.consultantRole}>Senior ESG Consultant</p>
+                      <div className={styles.consultantContact}>
+                        <span>📧 hj@esgpro.co.uk</span>
+                        <span>📞 +44 7XXX XXX XXX</span>
+                      </div>
+                    </div>
+                    <button 
+                      className={`${styles.ctaButton} ${styles.ctaPrimary}`}
+                      onClick={() => handleCalendlyClick('humperdinck')}
+                    >
+                      📅 Book with Humperdinck
+                    </button>
+                  </div>
+
+                  {/* Natashia Card */}
+                  <div className={styles.consultantCard}>
+                    <div className={styles.consultantInfo}>
+                      <h4 className={styles.consultantName}>Natashia Lee</h4>
+                      <p className={styles.consultantRole}>ESG Specialist</p>
+                      <div className={styles.consultantContact}>
+                        <span>📧 nl@esgpro.co.uk</span>
+                        <span>📞 +44 7XXX XXX XXX</span>
+                      </div>
+                    </div>
+                    <button 
+                      className={`${styles.ctaButton} ${styles.ctaPrimary}`}
+                      onClick={() => handleCalendlyClick('natashia')}
+                    >
+                      📅 Book with Natashia
+                    </button>
+                  </div>
+                </div>
+                
+                <button 
+                  className={`${styles.ctaButton} ${styles.ctaOutline}`} 
+                  onClick={resetInterview}
+                >
+                  🔄 Start New Assessment
+                </button>
+              </>
+            ) : (
+              <>
+                <button 
+                  className={`${styles.ctaButton} ${action === 'BUY_50_ASSESSMENT' ? styles.ctaGreen : styles.ctaSecondary}`}
+                  onClick={handlePrimaryAction}
+                >
+                  {action === 'BUY_50_ASSESSMENT' && '💷 Get £50 Assessment Now'}
+                  {action === 'NURTURE' && '📬 Subscribe to Updates'}
+                </button>
+                
+                <button 
+                  className={`${styles.ctaButton} ${styles.ctaOutline}`} 
+                  onClick={resetInterview}
+                >
+                  🔄 Start New Assessment
+                </button>
+              </>
+            )}
           </div>
 
           {urgency === 'high' && (

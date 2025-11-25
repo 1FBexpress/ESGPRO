@@ -408,3 +408,137 @@
     width: 100%;
   }
 }
+
+/* Consultant Selection Cards */
+.consultantGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.consultantCard {
+  background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 2px solid #e0e0e0;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.consultantCard:hover {
+  border-color: #667eea;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.15);
+}
+
+.consultantInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.consultantName {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin: 0;
+}
+
+.consultantRole {
+  font-size: 0.9rem;
+  color: #667eea;
+  font-weight: 600;
+  margin: 0;
+}
+
+.consultantContact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+  color: #718096;
+  margin-top: 0.5rem;
+}
+
+.consultantContact span {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .consultantGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Consultant Selection Cards */
+.consultantGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.consultantCard {
+  background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 2px solid #e0e0e0;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.consultantCard:hover {
+  border-color: #667eea;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.15);
+}
+
+.consultantInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.consultantName {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin: 0;
+}
+
+.consultantRole {
+  font-size: 0.9rem;
+  color: #667eea;
+  font-weight: 600;
+  margin: 0;
+}
+
+.consultantContact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+  color: #718096;
+  margin-top: 0.5rem;
+}
+
+.consultantContact span {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .consultantGrid {
+    grid-template-columns: 1fr;
+  }
+}
