@@ -1,4 +1,4 @@
-import { promises as fs } from 'fs';
+import { readFile, writeFile } from 'fs/promises';
 import path from 'path';
 import crypto from 'crypto';
 
@@ -8,50 +8,83 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { email, collectedData, currentStep, questionnaireType } = req.body;
+    const { email, currentStep, collectedData, questionnaireType } = req.body;
 
-    // Validate email
+    // Validate required fields
     if (!email || !email.includes('@')) {
-      return res.status(400).json({ error: 'Valid email required' });
+      return res.status(400).json({ error: 'Valid email is required' });
+    }
+
+    if (currentStep === undefined || !collectedData) {
+      return res.status(400).json({ error: 'Progress data is required' });
     }
 
     // Generate unique resume token
-    const resumeToken = crypto.randomBytes(16).toString('hex');
-    const savedAt = new Date().toISOString();
+    const resumeToken = crypto.randomBytes(32).toString('hex');
+    
+    // Calculate expiry date (30 days from now)
+    const expiryDate = new Date();
+    expiryDate.setDate(expiryDate.getDate() + 30);
 
-    const progressData = {
-      resumeToken,
+    // Create progress record
+    const progressRecord = {
+      id: Date.now(),
       email,
-      collectedData,
+      resumeToken,
       currentStep,
-      questionnaireType: questionnaireType || 'basic',
-      savedAt,
-      expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() // 30 days
+      collectedData,
+      questionnaireType: questionnaireType || 'general',
+      savedAt: new Date().toISOString(),
+      expiresAt: expiryDate.toISOString(),
+      status: 'in_progress'
     };
 
-    // Save to file system (in production, use database)
-    const progressDir = path.join(process.cwd(), 'data', 'progress');
-    await fs.mkdir(progressDir, { recursive: true });
-    
-    const progressFile = path.join(progressDir, `${resumeToken}.json`);
-    await fs.writeFile(progressFile, JSON.stringify(progressData, null, 2));
+    // Read existing saved progress
+    const dataDir = path.join(process.cwd(), 'data');
+    const progressFile = path.join(dataDir, 'saved-progress.json');
+
+    let savedProgress = [];
+    try {
+      const fileContent = await readFile(progressFile, 'utf-8');
+      savedProgress = JSON.parse(fileContent);
+    } catch (err) {
+      // File doesn't exist yet, that's okay
+      console.log('Creating new saved-progress.json file');
+    }
+
+    // Check if email already has saved progress
+    const existingIndex = savedProgress.findIndex(p => p.email === email);
+    if (existingIndex !== -1) {
+      // Update existing progress
+      savedProgress[existingIndex] = progressRecord;
+    } else {
+      // Add new progress
+      savedProgress.push(progressRecord);
+    }
+
+    // Write back to file
+    await writeFile(progressFile, JSON.stringify(savedProgress, null, 2));
 
     // Generate resume URL
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://esgpro.vercel.app';
-    const resumeUrl = `${baseUrl}/?resume=${resumeToken}`;
+    const resumeUrl = `${baseUrl}?resume=${resumeToken}`;
 
     // TODO: Send email with resume link
-    // For now, just return the URL
-    // In production, integrate with SendGrid or similar
+    // For now, just return the link
+    console.log(`Resume link for ${email}: ${resumeUrl}`);
 
     return res.status(200).json({
       success: true,
+      message: 'Progress saved successfully',
       resumeUrl,
-      message: 'Progress saved! Check your email for the resume link.'
+      expiresAt: expiryDate.toISOString()
     });
 
   } catch (error) {
     console.error('Save progress error:', error);
-    return res.status(500).json({ error: 'Failed to save progress' });
+    return res.status(500).json({ 
+      error: 'Failed to save progress',
+      details: error.message 
+    });
   }
 }

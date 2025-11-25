@@ -1,10 +1,12 @@
 
 import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/router';
 import { useInterview } from '../context/InterviewContext';
 import Message from './Message';
 import TypingIndicator from './TypingIndicator';
 import ResultsPanel from './ResultsPanel';
 import ProgressIndicator from './ProgressIndicator';
+import SaveProgressModal from './SaveProgressModal';
 import { 
   getNextQuestion, 
   validateResponse, 
@@ -15,6 +17,7 @@ import {
 import styles from '../styles/ChatInterface.module.css';
 
 export default function ChatInterface() {
+  const router = useRouter();
   const {
     messages,
     addMessage,
@@ -29,6 +32,10 @@ export default function ChatInterface() {
   const [currentStep, setCurrentStep] = useState(0);
   const [isTyping, setIsTyping] = useState(false);
   const [showProgress, setShowProgress] = useState(false);
+  const [showSaveModal, setShowSaveModal] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+  const [isResuming, setIsResuming] = useState(false);
   const messagesEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
   const inputRef = useRef(null);
@@ -59,16 +66,76 @@ export default function ChatInterface() {
     }
   }, [messages]);
 
+  // Auto-resume from saved progress
   useEffect(() => {
-    // Start conversation - get straight to questions
-    if (messages.length === 0) {
+    const resumeToken = router.query.resume;
+    
+    if (resumeToken && messages.length === 0) {
+      setIsResuming(true);
+      
+      // Fetch saved progress
+      fetch(`/api/resume-progress?token=${resumeToken}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            // Restore progress
+            setCurrentStep(data.currentStep);
+            
+            // Restore collected data
+            Object.entries(data.collectedData).forEach(([key, value]) => {
+              updateData(key, value);
+            });
+
+            // Add welcome back message
+            addBotMessage(
+              `\u2705 Welcome back! I've restored your progress from ${new Date(data.savedAt).toLocaleDateString()}.\n\nLet's continue where you left off...`,
+              null,
+              null
+            );
+
+            // Show next question after brief delay
+            setTimeout(() => {
+              setShowProgress(true);
+              const questionData = getNextQuestion(data.currentStep, data.collectedData);
+              addBotMessage(questionData.question, questionData.explanation, questionData.quickReplies);
+            }, 1500);
+          } else {
+            // Invalid or expired token
+            addBotMessage(
+              data.message || 'Sorry, this resume link is invalid or has expired. Let\\'s start fresh!',
+              null,
+              null
+            );
+            
+            // Start new conversation
+            setTimeout(() => {
+              setShowProgress(true);
+              const questionData = getNextQuestion(0, {});
+              addBotMessage(questionData.question, questionData.explanation, questionData.quickReplies);
+            }, 2000);
+          }
+        })
+        .catch(err => {
+          console.error('Resume error:', err);
+          // Start new conversation on error
+          setTimeout(() => {
+            setShowProgress(true);
+            const questionData = getNextQuestion(0, {});
+            addBotMessage(questionData.question, questionData.explanation, questionData.quickReplies);
+          }, 300);
+        })
+        .finally(() => {
+          setIsResuming(false);
+        });
+    } else if (messages.length === 0) {
+      // Start new conversation
       setTimeout(() => {
         setShowProgress(true);
         const questionData = getNextQuestion(currentStep, {});
         addBotMessage(questionData.question, questionData.explanation, questionData.quickReplies);
       }, 300);
     }
-  }, []);
+  }, [router.query.resume]);
 
   const addBotMessage = (content, explanation = null, quickReplies = null) => {
     setIsTyping(true);
@@ -155,6 +222,50 @@ export default function ChatInterface() {
     }
   };
 
+  const handleSaveProgress = async (email) => {
+    setIsSaving(true);
+    
+    try {
+      const response = await fetch('/api/save-progress', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          currentStep,
+          collectedData,
+          questionnaireType: 'general' // TODO: Update when separate questionnaires added
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setSaveSuccess(true);
+        
+        // Show success message
+        addBotMessage(
+          `\u2705 Great! I've saved your progress and sent a link to ${email}.\n\nYou can resume this assessment anytime within the next 30 days. Check your email for the link!`,
+          null,
+          null
+        );
+
+        // Hide success indicator after 3 seconds
+        setTimeout(() => {
+          setSaveSuccess(false);
+        }, 3000);
+      } else {
+        throw new Error(data.error || 'Failed to save progress');
+      }
+    } catch (error) {
+      console.error('Save error:', error);
+      throw error; // Re-throw to show error in modal
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   // Show results panel if interview is complete
   if (apiResponse) {
     return <ResultsPanel />;
@@ -167,6 +278,16 @@ export default function ChatInterface() {
     <div className={styles.chatContainer}>
       <div className={styles.chatHeader}>
         <h2 className={styles.chatTitle}>ESG Assessment</h2>
+        {currentStep > 0 && !apiResponse && (
+          <button
+            onClick={() => setShowSaveModal(true)}
+            className={styles.saveButton}
+            disabled={isLoading || isTyping || isSaving}
+            title="Save your progress and continue later"
+          >
+            {saveSuccess ? '\u2705 Saved' : '\ud83d\udcbe Save Progress'}
+          </button>
+        )}
       </div>
 
       {showProgress && (
@@ -214,6 +335,13 @@ export default function ChatInterface() {
           </button>
         </form>
       </div>
+
+      {/* Save Progress Modal */}
+      <SaveProgressModal
+        isOpen={showSaveModal}
+        onClose={() => setShowSaveModal(false)}
+        onSave={handleSaveProgress}
+      />
     </div>
   );
 }
