@@ -34,6 +34,9 @@
   background: #f8f9fa;
   position: relative;
   scroll-behavior: auto; /* Prevent smooth scroll jumps */
+  /* Prevent any scroll-related layout shifts */
+  scroll-snap-type: none;
+  overscroll-behavior: contain;
 }
 
 .messagesList {

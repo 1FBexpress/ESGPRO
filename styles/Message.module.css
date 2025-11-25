@@ -1,17 +1,18 @@
 
 .messageWrapper {
   display: flex;
-  animation: fadeIn 0.2s ease-out;
+  /* Animation disabled to prevent any page movement/jumping */
+  /* animation: fadeIn 0.2s ease-out; */
 }
 
-@keyframes fadeIn {
+/* @keyframes fadeIn {
   from {
     opacity: 0;
   }
   to {
     opacity: 1;
   }
-}
+} */
 
 .messageUser {
   justify-content: flex-end;

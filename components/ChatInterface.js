@@ -33,15 +33,17 @@ export default function ChatInterface() {
   const inputRef = useRef(null);
 
   const scrollToBottom = () => {
-    // Use instant scroll to prevent jerky animations
-    messagesEndRef.current?.scrollIntoView({ behavior: 'auto', block: 'end' });
+    // DISABLED: No auto-scroll to prevent page jumping/movement
+    // User can scroll manually if needed
+    // messagesEndRef.current?.scrollIntoView({ behavior: 'auto', block: 'end' });
   };
 
   useEffect(() => {
-    // Only scroll when new messages arrive, not during typing
-    if (!isTyping) {
-      scrollToBottom();
-    }
+    // DISABLED: Auto-scroll removed to keep page completely still
+    // This prevents the irritating page movement during chatbot responses
+    // if (!isTyping) {
+    //   scrollToBottom();
+    // }
   }, [messages]);
 
   useEffect(() => {
