@@ -189,10 +189,10 @@ export default function ResultsPanel() {
                   <div className={styles.consultantCard}>
                     <div className={styles.consultantInfo}>
                       <h4 className={styles.consultantName}>Humperdinck Jackman</h4>
-                      <p className={styles.consultantRole}>Senior ESG Consultant</p>
+                      <p className={styles.consultantRole}>CEO / ESG PRO Limited</p>
                       <div className={styles.consultantContact}>
                         <span>📧 hj@esgpro.co.uk</span>
-                        <span>📞 +44 7XXX XXX XXX</span>
+                        <span>📞 07943 061889</span>
                       </div>
                     </div>
                     <button 
@@ -207,10 +207,10 @@ export default function ResultsPanel() {
                   <div className={styles.consultantCard}>
                     <div className={styles.consultantInfo}>
                       <h4 className={styles.consultantName}>Natashia Lee</h4>
-                      <p className={styles.consultantRole}>ESG Specialist</p>
+                      <p className={styles.consultantRole}>Managing Director / ESG PRO Limited</p>
                       <div className={styles.consultantContact}>
                         <span>📧 nl@esgpro.co.uk</span>
-                        <span>📞 +44 7XXX XXX XXX</span>
+                        <span>📞 07414 234120</span>
                       </div>
                     </div>
                     <button 
