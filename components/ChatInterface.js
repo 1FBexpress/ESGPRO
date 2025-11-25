@@ -30,20 +30,33 @@ export default function ChatInterface() {
   const [isTyping, setIsTyping] = useState(false);
   const [showProgress, setShowProgress] = useState(false);
   const messagesEndRef = useRef(null);
+  const messagesContainerRef = useRef(null);
   const inputRef = useRef(null);
 
   const scrollToBottom = () => {
-    // DISABLED: No auto-scroll to prevent page jumping/movement
-    // User can scroll manually if needed
-    // messagesEndRef.current?.scrollIntoView({ behavior: 'auto', block: 'end' });
+    // Smart scroll: Only scroll the chat container, NOT the entire page
+    // This prevents the landing page from jumping while keeping chat usable
+    if (messagesContainerRef.current) {
+      const container = messagesContainerRef.current;
+      const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 150;
+      
+      // Only auto-scroll if user is already near the bottom (they're following the conversation)
+      // If they've scrolled up to read old messages, don't interrupt them
+      if (isNearBottom) {
+        container.scrollTo({
+          top: container.scrollHeight,
+          behavior: 'smooth'
+        });
+      }
+    }
   };
 
   useEffect(() => {
-    // DISABLED: Auto-scroll removed to keep page completely still
-    // This prevents the irritating page movement during chatbot responses
-    // if (!isTyping) {
-    //   scrollToBottom();
-    // }
+    // Re-enabled smart scroll: Only affects chat container, not the page
+    // Scrolls only when user is near bottom (following conversation)
+    if (!isTyping) {
+      scrollToBottom();
+    }
   }, [messages]);
 
   useEffect(() => {
@@ -164,7 +177,7 @@ export default function ChatInterface() {
         />
       )}
 
-      <div className={styles.messagesContainer}>
+      <div className={styles.messagesContainer} ref={messagesContainerRef}>
         <div className={styles.messagesList}>
           {messages.map((message, index) => (
             <Message 

@@ -33,10 +33,11 @@
   overflow-x: hidden;
   background: #f8f9fa;
   position: relative;
-  scroll-behavior: auto; /* Prevent smooth scroll jumps */
-  /* Prevent any scroll-related layout shifts */
+  scroll-behavior: smooth; /* Smooth scroll within container only */
+  /* Prevent scroll from affecting parent page */
   scroll-snap-type: none;
-  overscroll-behavior: contain;
+  overscroll-behavior: contain; /* KEY: Prevents scroll events from bubbling to parent page */
+  isolation: isolate; /* Create stacking context to contain scrolling */
 }
 
 .messagesList {
