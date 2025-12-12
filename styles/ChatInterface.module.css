@@ -171,3 +171,69 @@
     padding: 0.875rem 1.5rem;
   }
 }
+css
+Copy
+/* ===== Floating widget (small chat like Abacus) ===== */
+.widgetLauncher {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #2563eb, #22c55e);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+  z-index: 9999;
+  font-weight: 700;
+}
+
+.widgetPanel {
+  position: fixed;
+  right: 20px;
+  bottom: 90px;
+  width: 380px;
+  max-width: calc(100vw - 40px);
+  height: 560px;
+  max-height: calc(100vh - 140px);
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 18px 55px rgba(0,0,0,0.22);
+  overflow: hidden;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+}
+
+.widgetHeader {
+  padding: 10px 12px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #2563eb, #22c55e);
+  color: #fff;
+}
+
+.widgetTitle {
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.widgetSub {
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.widgetClose {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  background: rgba(255,255,255,0.18);
+  color: #fff;
+}
