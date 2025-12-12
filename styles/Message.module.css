@@ -124,3 +124,16 @@
   line-height: 1.2;
   max-width: 100%;
 }
+/* ===== Widget layout fixes: prevent ultra-narrow message column ===== */
+.widgetPanel .messagesContainer {
+  width: 100% !important;
+}
+
+.widgetPanel .messagesList {
+  width: 100% !important;
+}
+
+/* If your Message component wrapper is flex, this ensures it can stretch */
+.widgetPanel :global(.messageWrapper) {
+  width: 100% !important;
+}
