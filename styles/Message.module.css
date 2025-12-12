@@ -1,6 +1,7 @@
 
 .messageWrapper {
   display: flex;
+  width: 100%; /* FIX: Ensure wrapper takes full width to prevent text squeezing */
   /* Animation disabled to prevent any page movement/jumping */
   /* animation: fadeIn 0.2s ease-out; */
 }
@@ -31,6 +32,7 @@
   padding: 1rem 1.5rem;
   border-radius: 18px;
   word-wrap: break-word;
+  overflow-wrap: break-word; /* FIX: Better word wrapping */
   position: relative;
 }
 
@@ -99,58 +101,4 @@
   .messageContent {
     font-size: 0.9rem;
   }
-}
-/* ===== Widget readability fixes ===== */
-.messageBubble {
-  max-width: 92% !important; /* prevent ultra-narrow bubbles */
-  word-break: break-word;
-  overflow-wrap: anywhere;
-}
-
-.botMessage,
-.userMessage {
-  max-width: 92% !important;
-}
-
-/* Make quick replies wrap nicely in narrow widget */
-.quickReplies {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.quickReplyButton {
-  white-space: normal;
-  line-height: 1.2;
-  max-width: 100%;
-}
-/* ===== Widget layout fixes: prevent ultra-narrow message column ===== */
-.widgetPanel .messagesContainer {
-  width: 100% !important;
-}
-
-.widgetPanel .messagesList {
-  width: 100% !important;
-}
-
-/* If your Message component wrapper is flex, this ensures it can stretch */
-.widgetPanel :global(.messageWrapper) {
-  width: 100% !important;
-}
-/* ===== Widget: stop bot bubbles becoming a skinny column ===== */
-.messageBot .messageBubble {
-  width: fit-content;
-  max-width: 100% !important;
-}
-
-.messageBot .messageContent {
-  display: block;
-  width: 100%;
-  word-break: normal;
-  overflow-wrap: anywhere;
-}
-
-/* If something is constraining the wrapper, make it stretch */
-.messageWrapper {
-  width: 100%;
 }

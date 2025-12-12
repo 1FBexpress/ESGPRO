@@ -54,8 +54,3 @@ export default function Message({ message, onQuickReply, isLatest, disabled }) {
     </div>
   );
 }
-        />
-      )}
-    </div>
-  );
-}
