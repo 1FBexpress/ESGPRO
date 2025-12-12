@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { useInterview } from '../context/InterviewContext';
@@ -7,12 +6,12 @@ import TypingIndicator from './TypingIndicator';
 import ResultsPanel from './ResultsPanel';
 import ProgressIndicator from './ProgressIndicator';
 import SaveProgressModal from './SaveProgressModal';
-import { 
-  getNextQuestion, 
-  validateResponse, 
-  isInterviewComplete, 
-  TOTAL_STEPS, 
-  ESTIMATED_TIME 
+import {
+  getNextQuestion,
+  validateResponse,
+  isInterviewComplete,
+  TOTAL_STEPS,
+  ESTIMATED_TIME
 } from '../lib/conversationFlow';
 import styles from '../styles/ChatInterface.module.css';
 
@@ -36,6 +35,10 @@ export default function ChatInterface() {
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [isResuming, setIsResuming] = useState(false);
+
+  // NEW: widget open/close
+  const [isWidgetOpen, setIsWidgetOpen] = useState(true);
+
   const messagesEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
   const inputRef = useRef(null);
@@ -46,7 +49,7 @@ export default function ChatInterface() {
     if (messagesContainerRef.current) {
       const container = messagesContainerRef.current;
       const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 150;
-      
+
       // Only auto-scroll if user is already near the bottom (they're following the conversation)
       // If they've scrolled up to read old messages, don't interrupt them
       if (isNearBottom) {
@@ -64,15 +67,15 @@ export default function ChatInterface() {
     if (!isTyping) {
       scrollToBottom();
     }
-  }, [messages]);
+  }, [messages, isTyping]);
 
   // Auto-resume from saved progress
   useEffect(() => {
     const resumeToken = router.query.resume;
-    
+
     if (resumeToken && messages.length === 0) {
       setIsResuming(true);
-      
+
       // Fetch saved progress
       fetch(`/api/resume-progress?token=${resumeToken}`)
         .then(res => res.json())
@@ -80,7 +83,7 @@ export default function ChatInterface() {
           if (data.success) {
             // Restore progress
             setCurrentStep(data.currentStep);
-            
+
             // Restore collected data
             Object.entries(data.collectedData).forEach(([key, value]) => {
               updateData(key, value);
@@ -88,7 +91,7 @@ export default function ChatInterface() {
 
             // Add welcome back message
             addBotMessage(
-              `\u2705 Welcome back! I've restored your progress from ${new Date(data.savedAt).toLocaleDateString()}.\n\nLet's continue where you left off...`,
+              `✅ Welcome back! I've restored your progress from ${new Date(data.savedAt).toLocaleDateString()}.\n\nLet's continue where you left off...`,
               null,
               null
             );
@@ -106,7 +109,7 @@ export default function ChatInterface() {
               null,
               null
             );
-            
+
             // Start new conversation
             setTimeout(() => {
               setShowProgress(true);
@@ -135,6 +138,7 @@ export default function ChatInterface() {
         addBotMessage(questionData.question, questionData.explanation, questionData.quickReplies);
       }, 300);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query.resume]);
 
   const addBotMessage = (content, explanation = null, quickReplies = null) => {
@@ -163,7 +167,8 @@ export default function ChatInterface() {
     const validation = validateResponse(currentStep, userMessage, collectedData);
 
     if (!validation.valid) {
-      addBotMessage(validation.message);
+      // If validation includes quickReplies, pass them through so buttons show again
+      addBotMessage(validation.message, null, validation.quickReplies || null);
       return;
     }
 
@@ -183,8 +188,10 @@ export default function ChatInterface() {
     // Check if interview is complete
     if (isInterviewComplete(nextStep, updatedData)) {
       setTimeout(() => {
-        addBotMessage("🎉 Wonderful! Thank you so much for sharing all that information.\n\nLet me analyze your responses and prepare your personalized ESG assessment...");
-        
+        addBotMessage(
+          "🎉 Wonderful! Thank you for sharing that information.\n\nLet me analyze your responses and prepare your personalized ESG assessment..."
+        );
+
         // Submit interview
         setTimeout(async () => {
           await submitInterview();
@@ -211,7 +218,6 @@ export default function ChatInterface() {
 
   const handleQuickReply = async (value) => {
     if (isLoading || isTyping) return;
-    
     await processUserResponse(value);
   };
 
@@ -224,13 +230,11 @@ export default function ChatInterface() {
 
   const handleSaveProgress = async (email) => {
     setIsSaving(true);
-    
+
     try {
       const response = await fetch('/api/save-progress', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email,
           currentStep,
@@ -243,10 +247,10 @@ export default function ChatInterface() {
 
       if (data.success) {
         setSaveSuccess(true);
-        
+
         // Show success message
         addBotMessage(
-          `\u2705 Great! I've saved your progress and sent a link to ${email}.\n\nYou can resume this assessment anytime within the next 30 days. Check your email for the link!`,
+          `✅ Great! I've saved your progress and sent a link to ${email}.\n\nYou can resume this assessment anytime within the next 30 days. Check your email for the link!`,
           null,
           null
         );
@@ -266,82 +270,116 @@ export default function ChatInterface() {
     }
   };
 
-  // Show results panel if interview is complete
+  // Show results panel if interview is complete (keep as-is)
   if (apiResponse) {
     return <ResultsPanel />;
   }
 
-  // Calculate actual current question number (accounting for bot messages)
+  // Calculate actual current question number
   const currentQuestionNumber = Math.min(currentStep + 1, TOTAL_STEPS);
 
+  // NEW: floating widget wrapper
   return (
-    <div className={styles.chatContainer}>
-      <div className={styles.chatHeader}>
-        <h2 className={styles.chatTitle}>ESG Assessment</h2>
-        {currentStep > 0 && !apiResponse && (
-          <button
-            onClick={() => setShowSaveModal(true)}
-            className={styles.saveButton}
-            disabled={isLoading || isTyping || isSaving}
-            title="Save your progress and continue later"
-          >
-            {saveSuccess ? '\u2705 Saved' : '\ud83d\udcbe Save Progress'}
-          </button>
-        )}
-      </div>
-
-      {showProgress && (
-        <ProgressIndicator 
-          current={currentQuestionNumber}
-          total={TOTAL_STEPS}
-          estimatedTime={ESTIMATED_TIME}
-        />
+    <>
+      {!isWidgetOpen && (
+        <button
+          className={styles.widgetLauncher}
+          onClick={() => setIsWidgetOpen(true)}
+          type="button"
+          aria-label="Open chat"
+        >
+          Chat
+        </button>
       )}
 
-      <div className={styles.messagesContainer} ref={messagesContainerRef}>
-        <div className={styles.messagesList}>
-          {messages.map((message, index) => (
-            <Message 
-              key={index} 
-              message={message}
-              isLatest={index === messages.length - 1}
-              onQuickReply={handleQuickReply}
-              disabled={isLoading || isTyping}
-            />
-          ))}
-          {isTyping && <TypingIndicator />}
-          <div ref={messagesEndRef} />
+      {isWidgetOpen && (
+        <div className={styles.widgetPanel}>
+          <div className={styles.widgetHeader}>
+            <div>
+              <div className={styles.widgetTitle}>ESG Pro Assistant</div>
+              <div className={styles.widgetSub}>Online</div>
+            </div>
+            <button
+              className={styles.widgetClose}
+              onClick={() => setIsWidgetOpen(false)}
+              type="button"
+              aria-label="Close chat"
+            >
+              ✕
+            </button>
+          </div>
+
+          <div style={{ flex: 1, minHeight: 0 }}>
+            <div className={styles.chatContainer}>
+              <div className={styles.chatHeader}>
+                <h2 className={styles.chatTitle}>ESG Assessment</h2>
+                {currentStep > 0 && !apiResponse && (
+                  <button
+                    onClick={() => setShowSaveModal(true)}
+                    className={styles.saveButton}
+                    disabled={isLoading || isTyping || isSaving}
+                    title="Save your progress and continue later"
+                  >
+                    {saveSuccess ? '✅ Saved' : '💾 Save Progress'}
+                  </button>
+                )}
+              </div>
+
+              {showProgress && (
+                <ProgressIndicator
+                  current={currentQuestionNumber}
+                  total={TOTAL_STEPS}
+                  estimatedTime={ESTIMATED_TIME}
+                />
+              )}
+
+              <div className={styles.messagesContainer} ref={messagesContainerRef}>
+                <div className={styles.messagesList}>
+                  {messages.map((message, index) => (
+                    <Message
+                      key={index}
+                      message={message}
+                      isLatest={index === messages.length - 1}
+                      onQuickReply={handleQuickReply}
+                      disabled={isLoading || isTyping}
+                    />
+                  ))}
+                  {isTyping && <TypingIndicator />}
+                  <div ref={messagesEndRef} />
+                </div>
+              </div>
+
+              <div className={styles.inputContainer}>
+                <form onSubmit={handleSubmit} className={styles.inputForm}>
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    placeholder="Type your answer or click a button above..."
+                    className={styles.input}
+                    disabled={isLoading || isTyping}
+                  />
+                  <button
+                    type="submit"
+                    className={styles.sendButton}
+                    disabled={!input.trim() || isLoading || isTyping}
+                  >
+                    Send
+                  </button>
+                </form>
+              </div>
+
+              <SaveProgressModal
+                isOpen={showSaveModal}
+                onClose={() => setShowSaveModal(false)}
+                onSave={handleSaveProgress}
+              />
+            </div>
+          </div>
         </div>
-      </div>
-
-      <div className={styles.inputContainer}>
-        <form onSubmit={handleSubmit} className={styles.inputForm}>
-          <input
-            ref={inputRef}
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="Type your answer or click a button above..."
-            className={styles.input}
-            disabled={isLoading || isTyping}
-          />
-          <button
-            type="submit"
-            className={styles.sendButton}
-            disabled={!input.trim() || isLoading || isTyping}
-          >
-            Send
-          </button>
-        </form>
-      </div>
-
-      {/* Save Progress Modal */}
-      <SaveProgressModal
-        isOpen={showSaveModal}
-        onClose={() => setShowSaveModal(false)}
-        onSave={handleSaveProgress}
-      />
-    </div>
+      )}
+    </>
   );
 }
