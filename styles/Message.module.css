@@ -29,11 +29,14 @@
 
 .messageBubble {
   max-width: 80%;
+  min-width: 200px; /* FIX: Prevent bubble from getting too narrow */
   padding: 1rem 1.5rem;
   border-radius: 18px;
   word-wrap: break-word;
-  overflow-wrap: break-word; /* FIX: Better word wrapping */
+  overflow-wrap: break-word;
+  word-break: normal; /* FIX: Prevent aggressive mid-word breaking */
   position: relative;
+  flex-shrink: 0; /* FIX: Prevent flex from shrinking the bubble */
 }
 
 .messageUser .messageBubble {

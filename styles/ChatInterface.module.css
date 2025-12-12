@@ -246,11 +246,13 @@ Copy
 
 .widgetPanel .messagesContainer {
   width: 100%;
+  overflow-x: hidden; /* FIX: Prevent horizontal overflow */
 }
 
 .widgetPanel .messagesList {
-  padding: 1rem; /* Reduced from 2rem for more text space in narrow widget */
+  padding: 0.75rem; /* FIX: Further reduced padding for more text space */
   width: 100%;
+  box-sizing: border-box; /* FIX: Include padding in width calculation */
 }
 
 .widgetPanel .inputContainer {
@@ -269,4 +271,18 @@ Copy
 .widgetPanel .sendButton {
   padding: 0.75rem 1rem;
   font-size: 0.9rem;
+}
+
+/* FIX: Widget-specific message bubble adjustments */
+/* In widget mode, allow messages to use more horizontal space */
+.widgetPanel .messageWrapper {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* FIX: Increase max-width for messages in widget to use available space better */
+.widgetPanel .messageBubble {
+  max-width: 90%; /* Increased from 80% for widget */
+  min-width: 180px; /* Adjusted min-width for narrow widget */
+  padding: 0.75rem 1rem; /* Reduced padding to maximize text space */
 }

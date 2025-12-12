@@ -22,7 +22,7 @@ export default function Message({ message, onQuickReply, isLatest, disabled }) {
 
   return (
     <div className={`${styles.messageWrapper} ${getMessageClass()}`}>
-      <div style={{ width: '100%' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '100%', flex: 1 }}>
         <div className={styles.messageBubble}>
           <div className={styles.messageContent}>{content}</div>
 
