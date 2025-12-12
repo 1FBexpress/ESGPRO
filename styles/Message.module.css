@@ -137,3 +137,20 @@
 .widgetPanel :global(.messageWrapper) {
   width: 100% !important;
 }
+/* ===== Widget: stop bot bubbles becoming a skinny column ===== */
+.messageBot .messageBubble {
+  width: fit-content;
+  max-width: 100% !important;
+}
+
+.messageBot .messageContent {
+  display: block;
+  width: 100%;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+
+/* If something is constraining the wrapper, make it stretch */
+.messageWrapper {
+  width: 100%;
+}
