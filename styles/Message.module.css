@@ -100,3 +100,27 @@
     font-size: 0.9rem;
   }
 }
+/* ===== Widget readability fixes ===== */
+.messageBubble {
+  max-width: 92% !important; /* prevent ultra-narrow bubbles */
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.botMessage,
+.userMessage {
+  max-width: 92% !important;
+}
+
+/* Make quick replies wrap nicely in narrow widget */
+.quickReplies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.quickReplyButton {
+  white-space: normal;
+  line-height: 1.2;
+  max-width: 100%;
+}
