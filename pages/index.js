@@ -71,7 +71,7 @@ export default function Home() {
             {/* RIGHT: Integrated chat */}
             <aside className={styles.landingRight}>
               <div className={styles.chatDock}>
-                <ChatInterface />
+                <ChatInterface embedded />
               </div>
             </aside>
           </section>
