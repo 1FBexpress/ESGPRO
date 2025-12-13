@@ -1,65 +1,195 @@
+.landingShell {
+  padding: 56px 20px 70px;
+  background: #f5fbff; /* light clean background like "before" */
+  min-height: 85vh;
 
-.interviewerSection {
-  padding: 60px 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: grid;
+  grid-template-columns: minmax(520px, 1fr) 420px;
+  gap: 34px;
+  align-items: start;
 }
 
-.introSection {
-  text-align: center;
-  margin-bottom: 2rem;
-  padding: 2rem;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.mainTitle {
-  font-size: 2rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 1rem;
-}
-
-.sectionTitle {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #1a202c;
-  margin-bottom: 1rem;
-}
-
-.subtitle {
-  font-size: 1.1rem;
-  color: #666;
-  line-height: 1.6;
-  max-width: 600px;
+.landingLeft {
+  max-width: 860px;
   margin: 0 auto;
 }
 
-@media (max-width: 768px) {
-  .interviewerSection {
-    padding: 40px 16px;
+.landingRight {
+  position: relative;
+}
+
+.chatDock {
+  position: sticky;
+  top: 96px; /* sits under header */
+}
+
+/* badge */
+.badgeRow {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.promoBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #b42318;
+  background: #ffffff;
+  border: 1px solid rgba(180, 35, 24, 0.2);
+}
+
+/* hero */
+.heroTitle {
+  text-align: center;
+  font-size: 56px;
+  line-height: 1.05;
+  margin: 10px 0 10px;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.heroAccent {
+  background: linear-gradient(135deg, #22c55e 0%, #2563eb 70%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.heroSubtitle {
+  text-align: center;
+  margin: 0 auto 26px;
+  max-width: 760px;
+  font-size: 18px;
+  line-height: 1.45;
+  color: rgba(15, 23, 42, 0.72);
+}
+
+/* offer card (green border, white card) */
+.offerCard {
+  background: #ffffff;
+  border-radius: 18px;
+  border: 3px solid rgba(34, 197, 94, 0.55);
+  box-shadow: 0 14px 40px rgba(15, 23, 42, 0.12);
+  padding: 22px;
+}
+
+.offerHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+.offerTitle {
+  font-size: 20px;
+  font-weight: 900;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.offerSub {
+  font-size: 14px;
+  color: rgba(15, 23, 42, 0.7);
+}
+
+.priceBlock {
+  text-align: right;
+  min-width: 90px;
+}
+
+.oldPrice {
+  font-size: 14px;
+  text-decoration: line-through;
+  color: rgba(15, 23, 42, 0.45);
+  margin-bottom: 2px;
+}
+
+.newPrice {
+  font-size: 44px;
+  font-weight: 900;
+  color: #16a34a;
+  line-height: 1;
+}
+
+.offerList {
+  margin: 14px 0 14px;
+  padding-left: 18px;
+  color: rgba(15, 23, 42, 0.8);
+  line-height: 1.55;
+  font-size: 14px;
+}
+
+.offerList li {
+  margin: 8px 0;
+}
+
+.offerNote {
+  background: #f1f7ff;
+  border: 1px solid rgba(37, 99, 235, 0.18);
+  color: rgba(15, 23, 42, 0.78);
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 13px;
+  line-height: 1.45;
+  margin: 10px 0 16px;
+}
+
+.primaryCta {
+  display: block;
+  text-align: center;
+  background: #4f46e5;
+  color: #fff;
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-weight: 900;
+  text-decoration: none;
+  box-shadow: 0 10px 30px rgba(79, 70, 229, 0.24);
+}
+
+.primaryCta:hover {
+  filter: brightness(1.03);
+}
+
+/* Make embedded chat sit nicely (no extra margins) */
+.chatDock :global(.chatContainer) {
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .landingShell {
+    grid-template-columns: 1fr;
   }
 
-  .introSection {
-    padding: 1.5rem;
-    margin-bottom: 1rem;
+  .chatDock {
+    position: static;
+    margin-top: 18px;
+  }
+}
+
+@media (max-width: 640px) {
+  .landingShell {
+    padding: 34px 16px 56px;
   }
 
-  .mainTitle {
-    font-size: 1.5rem;
+  .heroTitle {
+    font-size: 38px;
   }
 
-  .sectionTitle {
-    font-size: 1.5rem;
+  .heroSubtitle {
+    font-size: 16px;
   }
 
-  .subtitle {
-    font-size: 1rem;
+  .offerCard {
+    padding: 18px;
+  }
+
+  .newPrice {
+    font-size: 38px;
   }
 }
