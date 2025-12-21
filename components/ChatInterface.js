@@ -16,7 +16,7 @@ import {
 } from '../lib/conversationFlow';
 import styles from '../styles/ChatInterface.module.css';
 
-export default function ChatInterface() {
+export default function ChatInterface({ isFloatingMode = false }) {
   const router = useRouter();
   const {
     messages,
@@ -275,20 +275,22 @@ export default function ChatInterface() {
   const currentQuestionNumber = Math.min(currentStep + 1, TOTAL_STEPS);
 
   return (
-    <div className={styles.chatContainer}>
-      <div className={styles.chatHeader}>
-        <h2 className={styles.chatTitle}>ESG Assessment</h2>
-        {currentStep > 0 && !apiResponse && (
-          <button
-            onClick={() => setShowSaveModal(true)}
-            className={styles.saveButton}
-            disabled={isLoading || isTyping || isSaving}
-            title="Save your progress and continue later"
-          >
-            {saveSuccess ? '\u2705 Saved' : '\ud83d\udcbe Save Progress'}
-          </button>
-        )}
-      </div>
+    <div className={`${styles.chatContainer} ${isFloatingMode ? styles.floatingMode : ''}`}>
+      {!isFloatingMode && (
+        <div className={styles.chatHeader}>
+          <h2 className={styles.chatTitle}>ESG Assessment</h2>
+          {currentStep > 0 && !apiResponse && (
+            <button
+              onClick={() => setShowSaveModal(true)}
+              className={styles.saveButton}
+              disabled={isLoading || isTyping || isSaving}
+              title="Save your progress and continue later"
+            >
+              {saveSuccess ? '\u2705 Saved' : '\ud83d\udcbe Save Progress'}
+            </button>
+          )}
+        </div>
+      )}
 
       {showProgress && (
         <ProgressIndicator 
