@@ -133,16 +133,13 @@ export default async function handler(req, res) {
       // Import email service for sales notification
       const { NOTIFICATION_RECIPIENTS } = require('../../lib/emailService');
       
-      if (process.env.SENDGRID_API_KEY) {
-        const sgMail = require('@sendgrid/mail');
-        sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+      if (process.env.RESEND_API_KEY) {
+        const { Resend } = require('resend');
+        const resend = new Resend(process.env.RESEND_API_KEY);
 
-        const salesNotification = {
+        await resend.emails.send({
+          from: process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev',
           to: NOTIFICATION_RECIPIENTS,
-          from: {
-            email: process.env.SENDGRID_FROM_EMAIL || 'notifications@full-bin.com',
-            name: 'ESG Pro Interviewer'
-          },
           subject: `🎯 New Consultation Booking: ${booking.contact_name}${booking.company_name ? ` (${booking.company_name})` : ''}`,
           text: `
 NEW CONSULTATION BOOKING
@@ -244,9 +241,8 @@ Booking ID: ${bookingId || 'N/A'}
 </body>
 </html>
           `
-        };
-
-        await sgMail.send(salesNotification);
+        });
+        
         console.log('✅ Sales team notified about booking');
       }
     } catch (notifyError) {
