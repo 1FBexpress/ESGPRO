@@ -102,7 +102,7 @@ export default function ChatInterface() {
           } else {
             // Invalid or expired token
             addBotMessage(
-              data.message || 'Sorry, this resume link is invalid or has expired. Let\\'s start fresh!',
+              data.message || "Sorry, this resume link is invalid or has expired. Let's start fresh!",
               null,
               null
             );
