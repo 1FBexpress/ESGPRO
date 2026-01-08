@@ -12,6 +12,12 @@
       "dest": "/$1"
     }
   ],
+  "crons": [
+    {
+      "path": "/api/cron/daily-analytics-report",
+      "schedule": "0 9 * * *"
+    }
+  ],
   "github": {
     "silent": false
   }

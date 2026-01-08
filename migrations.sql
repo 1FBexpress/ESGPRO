@@ -55,6 +55,20 @@ CREATE TABLE IF NOT EXISTS bookings (
   updated_at timestamptz DEFAULT now()
 );
 
+-- Pageviews table for analytics tracking
+CREATE TABLE IF NOT EXISTS pageviews (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  page text NOT NULL,
+  referrer text,
+  user_agent text,
+  session_id text,
+  ip_address text,
+  country text,
+  city text,
+  timestamp timestamptz DEFAULT now(),
+  created_at timestamptz DEFAULT now()
+);
+
 -- Create indexes for better query performance
 CREATE INDEX IF NOT EXISTS idx_leads_status ON leads(status);
 CREATE INDEX IF NOT EXISTS idx_leads_urgency ON leads(urgency);
@@ -64,6 +78,9 @@ CREATE INDEX IF NOT EXISTS idx_bookings_status ON bookings(status);
 CREATE INDEX IF NOT EXISTS idx_bookings_preferred_date ON bookings(preferred_date);
 CREATE INDEX IF NOT EXISTS idx_bookings_email ON bookings(email);
 CREATE INDEX IF NOT EXISTS idx_bookings_created_at ON bookings(created_at);
+CREATE INDEX IF NOT EXISTS idx_pageviews_timestamp ON pageviews(timestamp);
+CREATE INDEX IF NOT EXISTS idx_pageviews_page ON pageviews(page);
+CREATE INDEX IF NOT EXISTS idx_pageviews_session_id ON pageviews(session_id);
 
 -- Add updated_at trigger for bookings table
 CREATE OR REPLACE FUNCTION update_updated_at_column()
