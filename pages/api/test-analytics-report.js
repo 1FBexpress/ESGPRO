@@ -15,7 +15,7 @@ export default async function handler(req, res) {
     const host = req.headers['host'];
     const cronUrl = `${protocol}://${host}/api/cron/daily-analytics-report`;
 
-    console.log(`Triggering analytics report test: ${cronUrl}`);
+    console.log(`Test Analytics: Triggering analytics report test: ${cronUrl}`);
 
     const response = await fetch(cronUrl, {
       method: 'POST',
@@ -25,7 +25,34 @@ export default async function handler(req, res) {
       }
     });
 
-    const data = await response.json();
+    console.log(`Test Analytics: Response status: ${response.status}`);
+
+    // Get response text first to check if it's empty
+    const responseText = await response.text();
+    console.log(`Test Analytics: Response text length: ${responseText.length}`);
+
+    // Try to parse as JSON if we have content
+    let data = null;
+    if (responseText && responseText.trim().length > 0) {
+      try {
+        data = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error('Test Analytics: Failed to parse JSON response', parseError);
+        return res.status(500).json({
+          success: false,
+          message: 'Analytics report returned invalid JSON',
+          error: parseError.message,
+          responseText: responseText.substring(0, 500) // First 500 chars for debugging
+        });
+      }
+    } else {
+      console.error('Test Analytics: Empty response from cron endpoint');
+      return res.status(500).json({
+        success: false,
+        message: 'Analytics report returned empty response',
+        statusCode: response.status
+      });
+    }
 
     if (response.ok) {
       return res.status(200).json({
@@ -37,6 +64,7 @@ export default async function handler(req, res) {
       return res.status(response.status).json({
         success: false,
         message: 'Analytics report test failed',
+        statusCode: response.status,
         error: data
       });
     }
@@ -45,7 +73,8 @@ export default async function handler(req, res) {
     console.error('Test analytics report error:', error);
     return res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
     });
   }
 }
