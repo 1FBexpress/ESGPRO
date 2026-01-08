@@ -13,10 +13,7 @@ const supabase = createClient(
 );
 
 const NOTIFICATION_RECIPIENTS = [
-  'christian@full-bin.com',
-  'hj@esgpro.co.uk',
-  'nl@esgpro.co.uk',
-  'laurence@twinfm.com'
+  'christian@full-bin.com'
 ];
 
 /**
